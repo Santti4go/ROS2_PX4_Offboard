@@ -45,39 +45,42 @@ import os
 def generate_launch_description():
     package_dir = get_package_share_directory('px4_offboard')
     # bash_script_path = os.path.join(package_dir, 'scripts', 'TerminatorScript.sh')
-    return LaunchDescription([
-        # ExecuteProcess(cmd=['bash', bash_script_path], output='screen'),
-        Node(
+    visualizer_node = Node(
             package='px4_offboard',
             namespace='px4_offboard',
             executable='visualizer',
             name='visualizer'
-        ),
-        Node(
-            package='px4_offboard',
-            namespace='px4_offboard',
-            executable='processes',
-            name='processes',
-            prefix='gnome-terminal --'
-        ),
-        Node(
-            package='px4_offboard',
-            namespace='px4_offboard',
-            executable='control',
-            name='control',
-            prefix='gnome-terminal --',
-        ),
-        Node(
+        )
+    velocity_contro_node = Node(
             package='px4_offboard',
             namespace='px4_offboard',
             executable='velocity_control',
             name='velocity'
-        ),
-        Node(
+        )
+    rviz2_node = Node(
             package='rviz2',
             namespace='',
             executable='rviz2',
             name='rviz2',
             arguments=['-d', [os.path.join(package_dir, 'visualize.rviz')]]
         )
+    return LaunchDescription([
+        # ExecuteProcess(cmd=['bash', bash_script_path], output='screen'),
+        visualizer_node,
+        velocity_contro_node,
+        rviz2_node,
+        # Node(
+        #     package='px4_offboard',
+        #     namespace='px4_offboard',
+        #     executable='processes',
+        #     name='processes',
+        #     prefix=['xterm -e']
+        # ),
+        # Node(
+        #     package='px4_offboard',
+        #     namespace='px4_offboard',
+        #     executable='control',
+        #     name='control',
+        #     prefix=['xterm -e']
+        # ),
     ])
