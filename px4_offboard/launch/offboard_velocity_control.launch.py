@@ -64,11 +64,21 @@ def generate_launch_description():
             name='rviz2',
             arguments=['-d', [os.path.join(package_dir, 'visualize.rviz')]]
         )
+    ros_gz_bridge = Node(
+            package='ros_gz_bridge',
+            executable='parameter_bridge',
+            arguments=['/world/default/model/x500_0/link/base_link/sensor/imu_sensor/imu' + \
+                       '@' + \
+                       'sensor_msgs/msg/Imu' + \
+                       '[' + \
+                       'gz.msgs.IMU']
+    )
     return LaunchDescription([
         # ExecuteProcess(cmd=['bash', bash_script_path], output='screen'),
         visualizer_node,
         velocity_contro_node,
         rviz2_node,
+        ros_gz_bridge,
         # Node(
         #     package='px4_offboard',
         #     namespace='px4_offboard',
